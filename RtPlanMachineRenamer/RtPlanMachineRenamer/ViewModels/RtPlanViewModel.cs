@@ -60,6 +60,27 @@ namespace RtPlanMachineRenamer.ViewModels
             }
         }
 
+        private string patientId;
+        public string PatientId
+        {
+            get { return patientId; }
+            set { SetProperty(ref patientId, value); }
+        }
+
+        private string patientName;
+        public string PatientName
+        {
+            get { return patientName; }
+            set { SetProperty(ref patientName, value); }
+        }
+
+        private bool doesOverwrite = true;
+        public bool DoesOverwrite
+        {
+            get { return doesOverwrite; }
+            set { SetProperty(ref doesOverwrite, value); }
+        }
+
         public DelegateCommand ChooseFileCommand { get; }
         public DelegateCommand OkCommand { get; }
         public DelegateCommand CancelCommand { get; }
@@ -102,6 +123,14 @@ namespace RtPlanMachineRenamer.ViewModels
         {
             RtPlan = DICOMObject.Read(RtPlanFilePath);
 
+            var strongName = RtPlan.FindFirst(TagHelper.PatientName) as PersonName;
+            var firstName = strongName.FirstName;
+            var lastName = strongName.LastName;
+
+            PatientName = lastName.ToUpper() + ", " + firstName;
+
+            PatientId = (RtPlan.FindFirst(TagHelper.PatientID) as LongString).Data;
+
             var beamSequence = RtPlan.FindFirst(TagHelper.BeamSequence);
             OriginalMachineName = (((DICOMObject)beamSequence.DData_[0]).FindFirst(TagHelper.TreatmentMachineName) as ShortString).Data;
         }
@@ -120,8 +149,12 @@ namespace RtPlanMachineRenamer.ViewModels
             var extension = Path.GetExtension(RtPlanFilePath);
 
             var newFileName = fileNameRoot + "_" + NewMachineName + extension;
-
             var newFilePath = Path.Combine(folderPath, newFileName);
+
+            if (DoesOverwrite)
+            {
+                newFilePath = RtPlanFilePath;
+            }
 
             RtPlan.Write(newFilePath);
         }

@@ -14,17 +14,29 @@
                 <Button Content="Choose File" Width="120" Command="{Binding ChooseFileCommand}" Margin="3,3,3,0"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
+                <Label Content="Patient ID:" Margin="3,0,0,0"/>
+                <TextBlock Text="{Binding PatientId, Mode=TwoWay}" Margin="3,0" VerticalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Patient Name:" Margin="3,0,0,0"/>
+                <TextBlock Text="{Binding PatientName, Mode=TwoWay}" Margin="3,0" VerticalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
                 <Label Content="Original Machine Name:" Margin="3,0,0,0"/>
-                <TextBlock VerticalAlignment="Center" Text="{Binding OriginalMachineName, Mode=OneWay}" Margin="0,0,3,0"/>
+                <TextBlock VerticalAlignment="Center" Text="{Binding OriginalMachineName, Mode=OneWay}" Margin="3,0"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label Content="New Machine Name:" Margin="3,0,0,0"/>
                 <TextBox x:Name="NewMachineNameInput" VerticalAlignment="Center" Text="{Binding NewMachineName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding ElementName=NewMachineNameInput, Path=(Validation.Errors)/ErrorContent}" Margin="3,0" MinWidth="120"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="3,0,0,0">
+                <Label Content="Overwrite?:"/>
+                <CheckBox IsChecked="{Binding DoesOverwrite, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="OkButton" Content="OK" Width="60" Command="{Binding OkCommand}" Click="OkButton_Click" Margin="3,0,0,3"/>
                 <Button x:Name="CancelButton" Content="Cancel" Width="60" Margin="3,0,3,3" Command="{Binding CancelCommand}" Click="CancelButton_Click"/>
             </StackPanel>
         </StackPanel>
-    </Grid>
+    </Grid> 
 </Window>

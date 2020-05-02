@@ -22,6 +22,10 @@
                 <TextBlock Text="{Binding PatientName, Mode=TwoWay}" Margin="3,0" VerticalAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
+                <Label Content="Plan ID:" Margin="3,0,0,0"/>
+                <TextBlock Text="{Binding PlanId, Mode=TwoWay}" Margin="3,0" VerticalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
                 <Label Content="Original Machine Name:" Margin="3,0,0,0"/>
                 <TextBlock VerticalAlignment="Center" Text="{Binding OriginalMachineName, Mode=OneWay}" Margin="3,0"/>
             </StackPanel>

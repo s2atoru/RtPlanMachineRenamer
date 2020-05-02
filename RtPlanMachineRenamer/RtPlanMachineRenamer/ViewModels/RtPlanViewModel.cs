@@ -6,6 +6,7 @@ using MvvmCommon.ViewModels;
 using Prism.Commands;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Windows;
 
 namespace RtPlanMachineRenamer.ViewModels
 {
@@ -74,6 +75,13 @@ namespace RtPlanMachineRenamer.ViewModels
             set { SetProperty(ref patientName, value); }
         }
 
+        private string planId;
+        public string PlanId
+        {
+            get { return planId; }
+            set { SetProperty(ref planId, value); }
+        }
+
         private bool doesOverwrite = true;
         public bool DoesOverwrite
         {
@@ -123,6 +131,15 @@ namespace RtPlanMachineRenamer.ViewModels
         {
             RtPlan = DICOMObject.Read(RtPlanFilePath);
 
+            var modality = (RtPlan.FindFirst(TagHelper.Modality) as CodeString).Data;
+            if (modality != "RTPLAN")
+            {
+                MessageBox.Show($"Modality ({modality}) is not RTPLAN. Choose RTPLAN.");
+                PatientName = string.Empty;
+                PatientId = string.Empty;
+                OriginalMachineName = string.Empty;
+                return;
+            }
             var strongName = RtPlan.FindFirst(TagHelper.PatientName) as PersonName;
             var firstName = strongName.FirstName;
             var lastName = strongName.LastName;
@@ -130,6 +147,8 @@ namespace RtPlanMachineRenamer.ViewModels
             PatientName = lastName.ToUpper() + ", " + firstName;
 
             PatientId = (RtPlan.FindFirst(TagHelper.PatientID) as LongString).Data;
+
+            PlanId = (RtPlan.FindFirst(TagHelper.RTPlanLabel) as ShortString).Data;
 
             var beamSequence = RtPlan.FindFirst(TagHelper.BeamSequence);
             OriginalMachineName = (((DICOMObject)beamSequence.DData_[0]).FindFirst(TagHelper.TreatmentMachineName) as ShortString).Data;
